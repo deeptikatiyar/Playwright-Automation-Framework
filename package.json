@@ -1,0 +1,31 @@
+{
+  "name": "playwrightautomation",
+  "version": "1.0.0",
+  "main": "index.js",
+"scripts": {
+  "test": "npx playwright test",
+  "allure:clean": "rm -rf allure-results allure-report",
+  "allure:env": "ts-node src/utils/generateAllureEnvHelper.ts",
+  "allure:env:chromium": "ts-node src/utils/generateAllureEnvHelper.ts Chromium",
+  "allure:env:firefox": "ts-node src/utils/generateAllureEnvHelper.ts Firefox",
+  "allure:generate": "allure generate allure-results --clean -o allure-report",
+  "allure:generate:merge": "allure generate allure-results -o allure-report",
+  "allure:open": "allure open allure-report",
+  "allure:report": "npm run allure:clean && npm run test && npm run allure:generate && npm run allure:open",
+  "allure:report:chromium": "npm run allure:clean && npm run allure:env:chromium && npx playwright test --project=Chromium && npm run allure:generate && npm run allure:open",
+  "allure:report:firefox": "npm run allure:clean && npm run allure:env:firefox && npx playwright test --project=Firefox && npm run allure:generate && npm run allure:open"
+},
+
+ "keywords": [],
+  "author": "Deepti",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "@playwright/test": "^1.53.1",
+    "@types/node": "^24.0.10",
+    "allure-commandline": "^2.34.1",
+    "allure-playwright": "^3.3.0",
+    "dotenv": "^17.0.0",
+    "ts-node": "^10.9.2"
+  }
+}
