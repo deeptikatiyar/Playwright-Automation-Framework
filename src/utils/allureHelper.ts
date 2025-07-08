@@ -1,4 +1,4 @@
-// src/utils/allureHelper.ts
+
 import { TestInfo } from '@playwright/test';
 
 type AllureMeta = {
@@ -6,9 +6,9 @@ type AllureMeta = {
   severity?: string;
 };
 
-export function annotate(testInfo: TestInfo, meta: AllureMeta) {
+export function annotate(testInfo: TestInfo, meta: AllureMeta) {   //annotate pushes metadata like tag and severity into testInfo.annotations();
   if (meta.tag) {
-    testInfo.annotations.push({
+    testInfo.annotations.push({    //Playwright's native annotation system
       type: 'tag',
       description: meta.tag
     });

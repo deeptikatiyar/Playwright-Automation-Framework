@@ -5,9 +5,9 @@ dotenv.config(); // Load .env values into process.env
 const environment = process.env.ENV || 'qa'; //checks the environment in .env file and takes the value. 
 // If no value is found then defaults to 'qa'.
 
-// 🔁 Smart logic for determining workers
+// logic for determining workers
 const workers = process.env.WORKERS
-  ? parseInt(process.env.WORKERS, 10)
+  ? parseInt(process.env.WORKERS, 10) // converts the string to number using Base 10
   : environment === 'dev'
     ? 4
     : environment === 'qa'
@@ -19,7 +19,8 @@ export const config = {
   workers,
   baseURL: process.env.BASE_URL || '',
   username: process.env.STANDARD_USER || '',
-  password: process.env.STANDARD_PASSWORD || ''
+  password: process.env.STANDARD_PASSWORD || '',
+  apiBaseURL: process.env.API_BASE_URL || ''
 };
 
 

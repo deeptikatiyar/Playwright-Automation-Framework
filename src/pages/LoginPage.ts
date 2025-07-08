@@ -1,5 +1,5 @@
 import { Page, Locator } from '@playwright/test';
-import { User } from '../testData/userModel';
+import { LoginUser } from '../testData/userModel';
 
 export class LoginPage {
   readonly page: Page;
@@ -30,7 +30,7 @@ export class LoginPage {
     }
   }
 
-  async login(user: User): Promise<void> {
+  async login(user: LoginUser): Promise<void> {
     await this.usernameInput.fill(user.username);
     await this.passwordInput.fill(user.password);
     await this.loginButton.click();

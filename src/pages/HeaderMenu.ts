@@ -13,7 +13,7 @@ export class HeaderMenu {
 
   async logout(): Promise<void> {
     await expect(this.menuButton).toBeVisible();
-    await this.menuButton.scrollIntoViewIfNeeded(); // optional for cross-browser
+    await this.menuButton.scrollIntoViewIfNeeded(); 
     await this.menuButton.click();
     
     await expect(this.logoutLink).toBeVisible();

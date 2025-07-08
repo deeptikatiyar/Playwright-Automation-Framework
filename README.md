@@ -1,38 +1,107 @@
 # Playwright Automation Framework (TypeScript + Allure Reporting)
 
-This project is a robust, scalable UI automation framework built using [Playwright](https://playwright.dev/), TypeScript, and integrated with advanced [Allure Reporting](https://docs.qameta.io/allure/). It follows modern best practices for test organization, data management, and reporting clarity.
+A fully functional, end-to-end test automation framework built with [Playwright](https://playwright.dev/) and TypeScript — designed for real-world UI and API testing. Integrated with [Allure Reporting](https://docs.qameta.io/allure/) for beautiful, actionable test insights.
 
-Built with love, learning, and late-night problem solving ✨
+Built with curiosity, resilience, continuous learning, overcoming frustrations and a lot of debugging 
 
 ---
 
 ## Tech Stack
 
-| Tool/Library       | Purpose                          |
-|--------------------|----------------------------------|
-| Playwright         | Test automation engine           |
-| TypeScript         | Strong typing & code structure   |
-| Allure             | Advanced visual test reporting   |
-| dotenv             | Secure environment variables     |
-| ts-node            | CLI execution for TS scripts     |
+| Tool/Library | Purpose                        |
+| ------------ | ------------------------------ |
+| Playwright   | Test automation engine         |
+| TypeScript   | Strong typing & code structure |
+| Allure       | Visual test reporting          |
+| dotenv       | Environment config             |
+| ts-node      | CLI execution for TS scripts   |
 
 ---
 
-## Folder Structure Overview
+## Project Structure
 
-```
+```bash
 ├── src/
-│   ├── pages/                    # Page Object Model classes
-│   ├── fixtures/                 # Custom Playwright test fixtures
-│   ├── testData/                 # Static and dynamic test data (.ts + .json)
-│   ├── utils/                    # Helper functions and shared logic
-│   ├── tests/                    # Organized test specs (login, cart, checkout)
+│   ├── fixtures/
+│   │   ├── standardUserFixture.ts         # UI login fixture
+│   │   └── apiContextFixture.ts           # API context fixture
 │
-├── allure-results/              # Raw results (auto-generated)
-├── allure-report/               # Final HTML report (auto-generated)
-├── .env                         # Environment-specific credentials
-├── playwright.config.ts         # Central Playwright config
-├── package.json                 # Automation scripts
+│   ├── pages/                             # POM for UI tests
+│   │   ├── CartPage.ts
+│   │   ├── CheckoutPage.ts
+│   │   ├── HeaderMenu.ts
+│   │   ├── LoginPage.ts
+│   │   └── ProductPage.ts
+│
+│   ├── testData/                          # Test data (TS + JSON)
+│   │   ├── validCustomers.json / .ts
+│   │   ├── invalidCustomers.json / .ts
+│   │   ├── createPostTestData.json
+│   │   ├── invalidPostData.json
+│   │   └── userModel.ts
+│
+│   ├── utils/                             # Reusable helpers
+│   │   ├── allureHelper.ts                # Annotates testInfo with tag/severity
+│   │   ├── cartHelper.ts                  # Clear cart helper
+│   │   ├── envHelper.ts                   # .env parsing
+│   │   ├── loginHelper.ts
+│   │   ├── jsonReaderHelper.ts            # Reads JSON test data
+│   │   ├── createPostHelper.ts            # POST wrapper for API test
+│   │   ├── taggedTestHelper.ts            # For UI test tagging
+│   │   └── taggedLoginHelper.ts           # For login-tagged tests
+│
+├── tests/
+│   ├── api/                               # API Test specs
+│   │   ├── users.spec.ts
+│   │   ├── createPost.spec.ts
+│   │   ├── countUsersByCompany.spec.ts
+│   │   ├── validateGeoCoordinates.spec.ts
+│   │   ├── healthCheck.spec.ts
+│   ├── login/
+│   ├── cart/
+│   ├── checkout/
+│   └── product/
+│
+├── .env                                   # Credentials/configs
+├── playwright.config.ts                   # Playwright config
+├── package.json                           # Scripts & deps
+├── tsconfig.json                          # Path aliasing, TypeScript config
+├── README.md                              # This file
+```
+
+---
+
+## Fixtures Overview
+
+### `standardUserFixture.ts`
+
+Provides a logged-in UI context using a valid user from `.env` and `userModel.ts`.
+
+### `apiContextFixture.ts`
+
+Bootstraps a pre-configured `apiContext` with `baseURL`, headers, and auto-tagging via `testInfo` for API test metadata.
+
+---
+
+## API Testing Support
+
+This framework includes complete API test capabilities:
+
+* Reusable `apiContextFixture` with preconfigured headers and baseURL
+* Auto-tagging using test title parsing (`@api`, `@smoke`, `@regression`, etc.)
+* `createPostHelper.ts` to abstract `POST` requests
+* `.json` driven test data
+* Status code checks, response validations, negative flows
+
+# Example
+
+```ts
+test('Create a new post @smoke', async ({ apiContext }) => {
+  const data = readJsonFile('testData/createPostTestData.json');
+  const { response, responseBody } = await createPost(apiContext, data);
+  expect(response.status()).toBe(201);
+  expect(responseBody).toMatchObject(data);
+});
 ```
 
 ---
@@ -40,159 +109,148 @@ Built with love, learning, and late-night problem solving ✨
 ## Setup & Usage
 
 ```bash
-# 1. Install all dependencies
+# Install all dependencies
 npm install
 
-# 2. Run all tests (default browser)
+# Run all tests
 npm run test
 
-# 3. Run tests for Chromium with Allure report
+# Generate and open Allure report for Chromium
 npm run allure:report:chromium
 
-# 4. Run tests for Firefox with Allure report
+# Run for Firefox
 npm run allure:report:firefox
 
-# 5. Open the last generated report
+# Open existing report
 npm run allure:open
 ```
 
 ---
 
-## Allure Reporting Scripts & Folder Usage
+## Allure Reporting Scripts
 
-### Folder Roles
+# Folder Roles
 
-- **`allure-results/`**: Raw test data saved during test execution (JSON, logs, screenshots).
-- **`allure-report/`**: Human-readable HTML report generated from the results above.
+* `allure-results/`: Raw test logs
+* `allure-report/`: Final HTML visual report
 
-### ⚙️ Common Allure Commands
+# Commands
 
 ```bash
-npm run allure:report          # Clean run + test + report + open
-npm run allure:generate        # Clean and generate from latest results
-npm run allure:generate:merge  # Merge results without cleaning
-npm run allure:open            # Open last generated report
-npm run allure:clean           # Remove old allure results/reports
+npm run allure:report          # Clean run + test + generate + open
+npm run allure:generate        # Just generate report
+npm run allure:generate:merge  # Without cleaning previous results
+npm run allure:clean           # Clean old results
+npm run allure:open            # View existing report
 ```
 
 ---
 
-## Test Data Strategy: `.ts` vs `.json`
+## Test Data Strategy
 
-This framework supports both `.ts` and `.json` test data sources — each with their strengths.
+# Use `.ts` for:
 
-### Use `.ts` when:
-- You want type safety and IntelliSense
-- You prefer named exports (`validCustomer1`, `adminUser`, etc.)
-- You need logic, reuse, or composition
+* Named exports, reuse
+* Type safety
+* Logical combinations
 
-**Benefits:** Clean, typed, IDE-friendly, reusable.
+# Use `.json` for:
 
----
-
-### Use `.json` when:
-- You want simple config-style test data
-- You prefer externalized, loopable test sets
-- You want non-developers to edit test data
-
-**Benefits:** Lightweight, editable, tool-friendly.
+* External data injection
+* Loops or bulk inputs
+* Simpler test contributors
 
 ---
 
-## Test Structure & Annotations
+# Test Architecture & Annotation
 
-This framework follows best practices for structuring tests with Playwright.
+* `test.describe()` for grouping
+* `beforeEach()` only when needed
+* `afterEach()` for cleanup (e.g., `clearCart()`)
+* `standardUserFixture.ts` handles login for UI tests
 
-- `test.describe()` used for logical grouping
-- `beforeEach()` only for shared setup
-- `afterEach()` used for teardown like `clearCart()`
-- Reusable login setup via `standardUserFixture`
+---
 
-### Allure Annotation Helper
+## Tagging & Metadata (UI + API)
+
+# UI Tests
+
+Tagged using the `taggedTest()` or `taggedLogin()` wrappers.
 
 ```ts
-// utils/annotate.ts
-export function annotate(testInfo, meta: { tag?: string; severity?: string }) {
-  if (meta.tag) testInfo.annotations.push({ type: 'tag', description: meta.tag });
-  if (meta.severity) testInfo.annotations.push({ type: 'severity', description: meta.severity });
-}
-```
-
----
-
-## Tagged Test Helper: `taggedTest()`
-
-A custom helper to apply tags and Allure metadata:
-
-```ts
-import { taggedTest } from '@/utils/tagsTestHelper';
+import { taggedTest } from '@/utils/taggedTestHelper';
 
 taggedTest('smoke', 'Valid login test', async ({ page }) => {
   // test logic
 });
 ```
 
-- Automatically appends `@smoke` to title
-- Annotates with Allure severity and tag
+Adds title `@smoke` and severity `critical`.
 
-### Supported Tags
+# API Tests
 
-| Tag        | Severity    |
-|------------|-------------|
-| smoke      | critical    |
-| regression | normal      |
-| sanity     | normal      |
-| flaky      | minor       |
-| wip        | trivial     |
+Tagging inferred from test title (`@smoke`, `@regression`, etc.) in `apiContextFixture.ts`.
 
-### Filter with CLI
+```ts
+test('Validate usernames are unique @smoke @api', async ({ apiContext }) => {
+  // test logic
+});
+```
+
+# Supported Tags
+
+| Tag        | Severity | Usage Context |
+| ---------- | -------- | ------------- |
+| smoke      | critical | UI + API      |
+| regression | normal   | UI + API      |
+| sanity     | normal   | UI            |
+| flaky      | minor    | UI            |
+| wip        | trivial  | UI            |
+
+# CLI Filtering
 
 ```bash
 npx playwright test --grep "@smoke"
-npx playwright test tests/login.spec.ts --grep "@regression"
+npx playwright test tests/api --grep "@regression"
+npx playwright test tests/login/login.spec.ts --grep "@smoke"
 ```
 
 ---
 
-## Login Flow Architecture
+## Login Flow Architecture (UI)
 
-This framework uses a layered login structure:
-
-`
-.env                → envHelper.ts → validUser (userModel.ts)
+```ts
+.env                → envHelper.ts → userModel.ts (valid users)
                         ↓
-                  loginHelper.ts → LoginPage with validUser
+                  loginHelper.ts → LoginPage.ts
                         ↓
-           standardUserFixture.ts → logs in before each test
+           standardUserFixture.ts → logs in automatically
                         ↓
-                    test file → receives a loggedInPage
-`
-
-This cleanly separates config, data, page actions, and test setup.
+                    test file → receives loggedInPage
+```
 
 ---
 
 ## Author
 
-**Deepti Katiyar**  
-Lead QA Engineer. Focused on building clean, reusable, production-ready frameworks with real-world value.
+**Deepti Katiyar**
+Lead QA Engineer passionate about building clean, practical automation frameworks that reflect real-world scenarios.
 
 ---
 
-## Future Roadmap
+## Future Roadmap and Enhancement
 
-- [ ] Merge cross-browser reports into a single matrix report
-- [ ] GitHub Actions CI/CD integration
-- [ ] API mocking & intercepts
-- [ ] Slack/email test notifications
-- [ ] Docker compatibility
+* [ ] CI/CD with GitHub Actions
+* [ ] API Mocking & Network Intercepts
+* [ ] Docker support
+* [ ] Slack/email alerts
 
 ---
 
-## Personal Note
+## Final Note
 
-This framework was built during a season of transition and growth. Every method, tag, and refactor reflects persistence, experience, knowledge
-continuous learning and progress.
+This framework wasn’t just written, it was earned. Through failed test runs, learning retries, and every bit of clarity earned the hard way.
 
-If you're a hiring manager or collaborator — this isn't just code.  
-It's a statement of skill, hunger, and readiness.
+It reflects readiness, real experience, and a deep desire to grow.
+
+If you're reviewing this as a hiring manager, thank you for considering me.
