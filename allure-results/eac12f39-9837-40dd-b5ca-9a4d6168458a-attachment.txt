@@ -1,7 +1,0 @@
-Email domains:  [
-  'april.biz',   'melissa.tv',
-  'yesenia.net', 'kory.org',
-  'annie.ca',    'jasper.info',
-  'billy.biz',   'rosamond.me',
-  'dana.io',     'karina.biz'
-]

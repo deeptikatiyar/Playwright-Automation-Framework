@@ -1,6 +1,0 @@
-New post created: {
-  title: 'Playwright is awesome',
-  body: 'Learning building blocks!',
-  userId: 101,
-  id: 101
-}
