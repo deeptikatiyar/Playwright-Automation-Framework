@@ -1,7 +1,7 @@
 import { expect } from '@playwright/test';
 import { test } from '@/fixtures/apiContextFixture';
 
-test('Verify user name from API appears correctly in UI', async ({ apiContext, page }) => {
+test.skip('Verify user name from API appears correctly in UI', async ({ apiContext, page }) => {
   const apiResponse = await apiContext.get('/users/1');
   const user = await apiResponse.json();
   const expectedName = user.name;

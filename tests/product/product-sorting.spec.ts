@@ -12,6 +12,8 @@ test.describe('Product Sorting Tests', () => {
 
     const names = await productPage.getAllProductNames();
     expect(names[0]).toContain('Sauce Labs Backpack');
+    const sortedNames = [...names].sort();
+    expect(names).toEqual(sortedNames);
   });
 
   taggedLogin('regression', 'Verify product sorting Z to A', async ({ loggedInPage }) => {
@@ -22,6 +24,8 @@ test.describe('Product Sorting Tests', () => {
 
     const names = await productPage.getAllProductNames();
     expect(names[0]).toContain('Test.allTheThings() T-Shirt (Red)');
+    const sortedNames = [...names].sort().reverse();
+    expect(names).toEqual(sortedNames);
   });
 
   taggedLogin('regression', 'Verify Product Sorting by price Descending', async ({loggedInPage}) => {
