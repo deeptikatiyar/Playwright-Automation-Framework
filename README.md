@@ -33,18 +33,20 @@ Built with curiosity, resilience, continuous learning, overcoming frustrations a
 │   │   ├── LoginPage.ts
 │   │   └── ProductPage.ts
 │
-│   ├── testData/                          # Test data (TS + JSON)
+│   ├── testData/                          # Test data (TS + JSON + CSV)
 │   │   ├── validCustomers.json / .ts
 │   │   ├── invalidCustomers.json / .ts
 │   │   ├── createPostTestData.json
 │   │   ├── invalidPostData.json
 │   │   └── userModel.ts
+│   │   └── invalidCustomers.csv
 │
 │   ├── utils/                             # Reusable helpers
 │   │   ├── allureHelper.ts                # Annotates testInfo with tag/severity
 │   │   ├── cartHelper.ts                  # Clear cart helper
 │   │   ├── envHelper.ts                   # .env parsing
 │   │   ├── loginHelper.ts
+│   │   ├── csvReaderHelper.ts             # Reads CSV test data
 │   │   ├── jsonReaderHelper.ts            # Reads JSON test data
 │   │   ├── createPostHelper.ts            # POST wrapper for API test
 │   │   ├── taggedTestHelper.ts            # For UI test tagging
@@ -160,6 +162,12 @@ npm run allure:open            # View existing report
 * Loops or bulk inputs
 * Simpler test contributors
 
+# Use `.csv` for:
+
+* Form validation testing
+* External QA-contributed test cases
+* Tabular data format (non-developer-friendly input)
+
 ---
 
 # Test Architecture & Annotation
@@ -249,7 +257,7 @@ Lead QA Engineer passionate about building clean, practical automation framework
 
 ## Final Note
 
-This framework wasn’t just written, it was earned. Through failed test runs, learning retries, and every bit of clarity earned the hard way.
+This framework wasn’t just written, it was earned. Through failed test runs, learning retries, and every bit of clarity earned with continuos learning and persistence.
 
 It reflects readiness, real experience, and a deep desire to grow.
 

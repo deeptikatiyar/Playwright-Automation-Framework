@@ -22,7 +22,14 @@ export class ProductPage {
 
   async sortBy(option: string): Promise<void> {
     await expect(this.sortDropdown).toBeVisible();
-    await this.sortDropdown.selectOption(option);
+  
+    try {
+      await this.sortDropdown.selectOption(option, { timeout: 3000 });
+    } catch (e: unknown) {
+      const error = e as Error;
+      console.warn(`Invalid option "${option}". Skipping-reason- ${error.message}`);
+      throw error; //  Re-throws the error so test can fail intentionally
+    }
   }
 
   async getAllProductNames(): Promise<string[]> {
@@ -58,4 +65,3 @@ export class ProductPage {
     return result;
   }
 }
-
